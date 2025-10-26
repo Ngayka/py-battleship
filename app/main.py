@@ -9,13 +9,18 @@ class Deck:
 
 
 class Ship:
-    def __init__(self, start: tuple[int, int], end: tuple[int, int], is_drowned: bool = False) -> None:
+    def __init__(self,
+                 start: tuple[int, int],
+                 end: tuple[int, int],
+                 is_drowned: bool = False) -> None:
         self.start = start
         self.end = end
         self.is_drowned = is_drowned
         self.decks = self._create_decks(self.start, self.end)
 
-    def _create_decks(self, start: tuple[int, int], end: tuple[int, int]) -> List[Deck]:
+    def _create_decks(self,
+                      start: tuple[int, int],
+                      end: tuple[int, int]) -> List[Deck]:
         (r1, c1), (r2, c2) = start, end
         decks = []
         if r1 == r2:
@@ -37,7 +42,6 @@ class Ship:
             self.is_drowned = True
         return self.is_drowned
 
-
     def fire(self, row: int, column: int) -> None:
         for deck in self.decks:
             if deck.row == row and deck.column == column:
@@ -51,7 +55,6 @@ class Battleship:
         self.field = {}
         self._build_fields()
         self._validate_field()
-        self.print_field()
 
     def _build_fields(self) -> None:
         for ship in self.ships:
@@ -62,9 +65,11 @@ class Battleship:
         length = [len(ship.decks) for ship in self.ships]
         if len(self.ships) != 10:
             raise ValueError("Must be exactly 10 ships")
-        if length.count(4) != 1 or length.count(3) != 2 or length.count(2) != 3 or length.count(1) != 4:
+        if (length.count(4) != 1
+                or length.count(3) != 2
+                or length.count(2) != 3
+                or length.count(1) != 4):
             raise ValueError("Wrong number of ships by size")
-        print(length)
 
         occupied = set(self.field.keys())
         for (row, column) in occupied:
@@ -76,9 +81,9 @@ class Battleship:
                             raise ValueError("Ships are touching!")
 
     def print_field(self) -> None:
-        for row in range(11):
+        for row in range(10):
             rows = []
-            for column in range(11):
+            for column in range(10):
                 if (row, column) not in self.field:
                     rows.append("~")
                 else:
@@ -100,5 +105,4 @@ class Battleship:
         ship.fire(row, column)
         if ship.check_drowned():
             return ("Sunk!")
-        else:
-            return ("Hit!")
+        return ("Hit!")
